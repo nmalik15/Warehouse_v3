@@ -60,3 +60,45 @@ def load_data():
     except FileNotFoundError:
         pass
 
+# Decoratort for actions
+def action_decorator(action):
+    def decorator(func):
+        func.action = action
+        return func
+    return decorator
+
+class Manager:
+    def __init__(self):
+        self.actions = {}
+
+    def assign(self, action_name, func):
+        """Assigns an action to a method."""
+        self.actions[action_name] = func
+
+    def get_action(self, action_name):
+        """Retrieves the assigned method for the given action."""
+        return self.actions.get(action_name)
+
+    @action_decorator("balance")
+    def manage_balance(self):
+        """Add or subtract amount from account balance."""
+        global account_balance, operations
+        print("\nDo you want to: ")
+        print("\t1. Add to account balance ")
+        print("\t2. Subtract from account balance ")
+        choice = input("Enter choice: ")
+        if choice == "1":
+            amount = float(input("Please enter amount to add to account balance: "))
+            account_balance += amount
+            operations.append(("Balance", amount))
+            print(f"\nNEW ACCOUNT BALANCE: {account_balance}")
+            key_press()
+        elif choice == "2":
+            amount = float(input("Please enter amount to subtract from account balance: "))
+            account_balance -= amount
+            operations.append(("Balance", -amount))
+            print(f"\nNEW ACCOUNT BALANCE: {account_balance}")
+            key_press()
+        else:
+            print("\nERROR! INVALID COMMAND. TRY AGAIN.")
+            key_press()
