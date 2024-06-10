@@ -148,4 +148,18 @@ class Manager:
             print("ERROR! INSUFFICIENT BALANCE FOR THIS PURCHASE!")
             key_press()
 
-            
+    @action_decorator("account")
+    def display_account_balance(self):
+        """Display current account balance."""
+        global account_balance
+        print(f"\nCurrent account balance: {account_balance}")
+        key_press()
+
+    @action_decorator("list")
+    def display_inventory(self):
+        """Display warehouse inventory."""
+        global inventory
+        print("Warehouse Inventory:")
+        for product, (quantity, price) in inventory.items():
+            print(f"{product}:\n\tStock: {quantity} \n\tPrice: {price}")
+        key_press()
