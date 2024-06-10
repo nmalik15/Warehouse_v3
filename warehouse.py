@@ -102,3 +102,50 @@ class Manager:
         else:
             print("\nERROR! INVALID COMMAND. TRY AGAIN.")
             key_press()
+    
+    @action_decorator("sale")
+    def record_sale(self):
+        """Record a sale."""
+        global account_balance, inventory, operations
+        product = input("Enter product name: ")
+        if product in inventory:
+            price = inventory[product][1]
+            quantity = int(input("Enter product quantity: "))
+            if quantity <= inventory[product][0]:
+                total_sale = price * quantity
+                account_balance += total_sale
+                inventory[product] = (inventory[product][0] - quantity, price)
+                if inventory[product][0] == 0:
+                    del inventory[product]
+                operations.append(("Sale", (product, quantity, price, total_sale)))
+                print(f"Sale recorded. New account balance: {account_balance}")
+                key_press()
+            else:
+                print(f"Insufficient quantity of {product} in the inventory.")
+                key_press()
+        else:
+            print(f"{product} is not available in the inventory.")
+            key_press()
+
+    @action_decorator("purchase")
+    def record_purchase(self):
+        """Record a purchase."""
+        global account_balance, inventory, operations
+        product = input("Enter product name: ")
+        price = float(input("Enter product price: "))
+        quantity = int(input("Enter product quantity: "))
+        total_cost = price * quantity
+        if total_cost <= account_balance:
+            account_balance -= total_cost
+            if product in inventory:
+                inventory[product] = (inventory[product][0] + quantity, price)
+            else:
+                inventory[product] = (quantity, price)
+            operations.append(("Purchase", (product, quantity, price, total_cost)))
+            print(f"Purchase recorded. New account balance: {account_balance}")
+            key_press()
+        else:
+            print("ERROR! INSUFFICIENT BALANCE FOR THIS PURCHASE!")
+            key_press()
+
+            
