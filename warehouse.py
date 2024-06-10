@@ -163,3 +163,49 @@ class Manager:
         for product, (quantity, price) in inventory.items():
             print(f"{product}:\n\tStock: {quantity} \n\tPrice: {price}")
         key_press()
+
+    @action_decorator("warehouse")
+    def display_product_status(self):
+        """Display product status in warehouse."""
+        global inventory
+        product = input("Enter product name: ")
+        if product in inventory:
+            quantity, price = inventory[product]
+            print(f"{product}:\n\tStock: {quantity} \n\tPrice: {price}")
+            key_press()
+        else:
+            print(f"Error! {product} is not in the warehouse.".upper())
+            key_press()
+
+    @action_decorator("review")
+    def review_operations(self):
+        """Review recorded operations."""
+        global operations
+        start = input("Enter starting index (leave blank to start from the beginning): ")
+        end = input("Enter ending index (leave blank to go until the end): ")
+        if not start:
+            start = 0
+        else:
+            start = int(start)
+        if not end:
+            end = len(operations)
+        else:
+            end = int(end)
+        if start < 0 or end > len(operations) or start >= end:
+            print("Invalid range.")
+            key_press()
+        else:
+            for i in range(start, end):
+                operation, details = operations[i]
+                if operation == "Balance":
+                    amount = details
+                    print(f"{i+1}. Balance changed by {amount}")
+                elif operation == "Sale":
+                    product, quantity, price, total_sale = details
+                    print(f"{i+1}. Sold {quantity} units of {product} for {total_sale}")
+                elif operation == "Purchase":
+                    product, quantity, price, total_cost = details
+                    print(f"{i+1}. Purchased {quantity} units of {product} for {total_cost}")
+            key_press()
+
+    
