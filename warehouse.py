@@ -208,4 +208,56 @@ class Manager:
                     print(f"{i+1}. Purchased {quantity} units of {product} for {total_cost}")
             key_press()
 
-    
+# Starts the Manager class
+manager = Manager()
+
+# Manually assign actions to methods
+manager.assign("balance", manager.manage_balance)
+manager.assign("sale", manager.record_sale)
+manager.assign("purchase", manager.record_purchase)
+manager.assign("account", manager.display_account_balance)
+manager.assign("list", manager.display_inventory)
+manager.assign("warehouse", manager.display_product_status)
+manager.assign("review", manager.review_operations)
+
+# Main program loop
+load_data()
+while True:
+    clear_screen()
+    print("*** >>  WAREHOUSE ACCOUNTING << ***")
+    print("\nPlease select the number for action:")
+    print("\t1. Balance - Add or subtract amount from account")
+    print("\t2. Sale - Record a sale")
+    print("\t3. Purchase - Record a purchase")
+    print("\t4. Account - Display account balance")
+    print("\t5. List - Display warehouse inventory")
+    print("\t6. Warehouse - Display product status in warehouse")
+    print("\t7. Review - Review recorded operations")
+    print("\t8. END - Terminate program")
+
+    command = input("\nEnter choice: ")
+
+    action_dict = {
+        "1": "balance",
+        "2": "sale",
+        "3": "purchase",
+        "4": "account",
+        "5": "list",
+        "6": "warehouse",
+        "7": "review",
+        "8": "end"
+    }
+
+    if command in action_dict:
+        if command == "8":
+            save_data()
+            print("Saving data...\n")
+            print("Terminating program...")
+            break
+        else:
+            action = manager.get_action(action_dict[command])
+            if action:
+                action()
+    else:
+        print("\n ERROR! INVALID COMMAND! PLEASE TRY AGAIN!")
+        key_press()
